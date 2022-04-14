@@ -18,7 +18,7 @@ TI官方cc2640推出的SDK在IAR环境下不支持中文路径，环境搭建注
 
 4. 编译时需先编译Stack，然后编译App项目。
 
-   ![image-20211116165815507](C:\ti\simplelink_cc2640r2_sdk_1_40_00_45\examples\rtos\CC2640R2_BLERACKET\ble5stack\BLE_RACKET_RSM_V1.1\README.assets\image-20211116165815507.png)
+   ![](https://gitee.com/chengziqiang/ble-pickleball/raw/master/README.assets/image-20211116165815507.png)
 
 ### **原子操作**
 
@@ -26,9 +26,13 @@ TI官方cc2640推出的SDK在IAR环境下不支持中文路径，环境搭建注
 
 ### 墨水屏库文件替换
 
-HNK-E0154A07-A1型号墨水屏对应的库文件为lcd_epd_libA07_r2.a![image-20220117173955792](C:\ti\simplelink_cc2640r2_sdk_1_40_00_45\examples\rtos\CC2640R2_BLERACKET\ble5stack\BLE_RACKET_RSM_V1.1\README.assets\image-20220117173955792.png)
+HNK-E0154A07-A1型号墨水屏对应的库文件为lcd_epd_libA07_r2.a
 
-修改全局环境变量，避免路径冲突（否则编译不过）![image-20220122103200518](C:\ti\simplelink_cc2640r2_sdk_1_40_00_45\examples\rtos\CC2640R2_BLERACKET\ble5stack\BLE_RACKET_RSM_V1.1\README.assets\image-20220122103200518.png)
+![](https://gitee.com/chengziqiang/ble-pickleball/raw/master/README.assets/image-20220117173955792.png)
+
+修改全局环境变量，避免路径冲突（否则编译不过）
+
+![](https://gitee.com/chengziqiang/ble-pickleball/raw/master/README.assets/image-20220122103200518.png)
 
 ### cJTAG烧录接口
 
