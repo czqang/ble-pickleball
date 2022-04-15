@@ -146,10 +146,11 @@ void Board_initKey_PowerOn(void)
   hKeyPins = PIN_open(&keyPins, keyPinsCfg);
   if(PIN_getInputValue(Board_KEY_IN) == 0)
   {
-       delay_ms(KEY_DELAY_POWERON_TIMEOUT);
-       PIN_setOutputValue(hKeyPins, Board_S_LED, 0);
-       PIN_setOutputValue(hKeyPins, Board_POWER_OUT, 1);
-       POWER_OnOff_FLAG = true;  //Power ON
+      SDITask_PrintfToUART("PowerOn Delay 5s\r\n");
+      delay_ms(KEY_DELAY_POWERON_TIMEOUT);
+      PIN_setOutputValue(hKeyPins, Board_S_LED, 0);
+      PIN_setOutputValue(hKeyPins, Board_POWER_OUT, 1);
+      POWER_OnOff_FLAG = true;  //Power ON
   }
 }
 

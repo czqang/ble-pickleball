@@ -370,8 +370,8 @@ static void SPPBLEServer_init(void)
 
   // Hard code the BD Address till CC2650 board gets its own IEEE address
 //  uint8 bdAddress[B_ADDR_LEN] = { 0x00, 0x01, 0x02, 0x03, 0x04, 0x05 };
-  uint8 bdAddress[B_ADDR_LEN] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
-  HCI_EXT_SetBDADDRCmd(bdAddress);
+////  uint8 bdAddress[B_ADDR_LEN] = { 0x01, 0x02, 0x03, 0x04, 0x05, 0x06 };
+//  HCI_EXT_SetBDADDRCmd(bdAddress);
 
   // Create an RTOS queue for message from profile to be sent to app.
   appMsgQueue = Util_constructQueue(&appMsg);

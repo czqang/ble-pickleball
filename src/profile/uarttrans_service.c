@@ -62,7 +62,7 @@
  * CONSTANTS
  */
 
-#define SERVAPP_NUM_ATTR_SUPPORTED        5
+#define SERVAPP_NUM_ATTR_SUPPORTED        8
 
 gattAttribute_t SerialPortServiceAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED];
 /*********************************************************************
@@ -104,6 +104,12 @@ CONST uint8 SerialPortServiceDataUUID[ATT_UUID_SIZE] =
   TI_BASE_UUID_128(SERIALPORTSERVICE_DATA_UUID)
 };
 
+// Battery Level UUID: 0xFFF2
+CONST uint8 SerialPortServiceBatteryLevelUUID[ATT_UUID_SIZE] =
+{
+  TI_BASE_UUID_128(SERIALPORTSERVICE_BATTERY_UUID)
+};
+
 
 /*********************************************************************
  * EXTERNAL VARIABLES
@@ -127,7 +133,8 @@ static SerialPortServiceCBs_t *SerialPortService_AppCBs = NULL;
 static CONST gattAttrType_t SerialPortService = { ATT_UUID_SIZE, SerialPortServUUID };
 
 // Serial Port Profile Characteristic Data Properties
-static uint8 SerialPortServiceDataProps = GATT_PROP_WRITE_NO_RSP | GATT_PROP_NOTIFY;
+static uint8 SerialPortServiceDataProps = GATT_PROP_NOTIFY;
+static uint8 SerialPortServiceBatteryLevelProps = GATT_PROP_READ;
 
 // Serial Port Profile Characteristic Configuration Each client has its own
 // instantiation of the Client Characteristic Configuration. Reads of the
@@ -137,9 +144,11 @@ static gattCharCfg_t *SerialPortServiceDataConfig;
 
 // Characteristic Data Value
 uint8 SerialPortServiceData[SERIALPORTSERVICE_DATA_LEN] = {0,};
+uint8 SerialPortServiceBatteryLevel = 100;
 
 // Serial Port Profile Characteristic Data User Description
-static uint8 SerialPortServiceDataUserDesp[21] = "Data Characteristic \0";
+static uint8 SerialPortServiceDataUserDesp[] = "Triaxial Acceleration data \0";
+static uint8 SerialPortServiceBatteryLevelUserDesp[] = "Battery Level \0";
 
 //Keep track of length
 static uint8 charDataValueLen = SERIALPORTSERVICE_DATA_LEN;
@@ -169,7 +178,7 @@ gattAttribute_t SerialPortServiceAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
       // Characteristic Data Value
       {
         { ATT_UUID_SIZE, SerialPortServiceDataUUID },
-        GATT_PERMIT_WRITE,
+        0,
         0,
         SerialPortServiceData
       },
@@ -188,6 +197,30 @@ gattAttribute_t SerialPortServiceAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
         GATT_PERMIT_READ,
         0,
         SerialPortServiceDataUserDesp
+      },
+      
+      // Battery level Declaration
+      {
+          { ATT_BT_UUID_SIZE, characterUUID },
+          GATT_PERMIT_READ,
+          0,
+          &SerialPortServiceBatteryLevelProps
+      },
+      
+      // Battery Level Value
+      {
+        { ATT_UUID_SIZE, SerialPortServiceBatteryLevelUUID },
+        GATT_PERMIT_READ,
+        0,
+        &SerialPortServiceBatteryLevel
+      },
+      
+      // Battery Level User Description
+      {
+        { ATT_BT_UUID_SIZE, charUserDescUUID },
+        GATT_PERMIT_READ,
+        0,
+        SerialPortServiceBatteryLevelUserDesp
       },
 };
 
@@ -249,7 +282,7 @@ bStatus_t SerialPortService_AddService( uint32 services )
     // Register GATT attribute list and CBs with GATT Server App
     status = GATTServApp_RegisterService( SerialPortServiceAttrTbl,
                                           GATT_NUM_ATTRS( SerialPortServiceAttrTbl ),
-                                          16,
+                                          GATT_MAX_ENCRYPT_KEY_SIZE,
                                           &SerialPortServiceCBs );
   }
   else
@@ -411,6 +444,11 @@ static bStatus_t SerialPortService_ReadAttrCB( uint16 connHandle, gattAttribute_
       case SERIALPORTSERVICE_DATA_UUID:
         *pLen = charDataValueLen;
         VOID memcpy( pValue, pAttr->pValue, charDataValueLen );
+        break;
+        
+      case SERIALPORTSERVICE_BATTERY_UUID:
+        *pLen = 1;
+        pValue[0] = *pAttr->pValue;
         break;
 
       default:
