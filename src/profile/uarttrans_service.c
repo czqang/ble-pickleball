@@ -134,7 +134,7 @@ static CONST gattAttrType_t SerialPortService = { ATT_UUID_SIZE, SerialPortServU
 
 // Serial Port Profile Characteristic Data Properties
 static uint8 SerialPortServiceDataProps = GATT_PROP_NOTIFY;
-static uint8 SerialPortServiceBatteryLevelProps = GATT_PROP_READ;
+static uint8 SerialPortServiceBatteryLevelProps = GATT_PROP_WRITE | GATT_PROP_READ | GATT_PROP_NOTIFY;
 
 // Serial Port Profile Characteristic Configuration Each client has its own
 // instantiation of the Client Characteristic Configuration. Reads of the
@@ -210,7 +210,7 @@ gattAttribute_t SerialPortServiceAttrTbl[SERVAPP_NUM_ATTR_SUPPORTED] =
       // Battery Level Value
       {
         { ATT_UUID_SIZE, SerialPortServiceBatteryLevelUUID },
-        GATT_PERMIT_READ,
+        GATT_PERMIT_WRITE | GATT_PERMIT_READ,
         0,
         &SerialPortServiceBatteryLevel
       },
@@ -542,7 +542,29 @@ static bStatus_t SerialPortService_WriteAttrCB( uint16 connHandle, gattAttribute
           //uncomment to notify application
           //notifyApp = SERIALPORTSERVICE_CHAR_DATA;
         }
-
+        break; 
+      
+      case SERIALPORTSERVICE_BATTERY_UUID:                
+        //Validate the value
+        // Make sure it's not a blob oper
+        if ( offset == 0 )
+        {
+          if ( len != 1 )
+          {
+            status = ATT_ERR_INVALID_VALUE_SIZE;
+          }
+        }
+        else
+        {
+          status = ATT_ERR_ATTR_NOT_LONG;
+        }
+        
+        //Write the value
+        if ( status == SUCCESS )
+        {
+          uint8 *pCurValue = (uint8 *)pAttr->pValue;        
+          *pCurValue = pValue[0];
+        }
         break;
 
       default:

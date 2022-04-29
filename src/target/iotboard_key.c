@@ -156,6 +156,7 @@ void Board_initKey_PowerOn(void)
 
 void Board_PowerOff(void)
 {
+    Util_stopClock(&keyChangeClock);
     Util_stopClock(&periodicClock);
     for(uint8_t t = 0; t < 6; t++)
     {
@@ -233,8 +234,8 @@ static void Board_keyCallback(PIN_Handle hPin, PIN_Id pinId)
             
             if(pressedTimes < BTN_PRESSED_SHORT)
                 pressedType = BTN_PRESSED_SHORT;
-            else
-                pressedType = BTN_PRESSED_MEDIUM;
+//            else
+//                pressedType = BTN_PRESSED_MEDIUM;
  
             // Notify the application
             if (appKeyChangeHandler != NULL){
@@ -259,11 +260,10 @@ static void Board_keyPressedHandler(UArg a0)
 //    if(pressedTimes % 5 == 0){   // Toggle the Tip LED per 5 second
 //        BLED_TogglePutputValue();
 //    }
-    if(pressedTimes >= BTN_PRESSED_LONG){
-        Util_stopClock(&keyChangeClock);
+    if(pressedTimes >= BTN_PRESSED_MEDIUM){
         // Notify the application
         if (appKeyChangeHandler != NULL){
-            (*appKeyChangeHandler)(BTN_PRESSED_LONG);
+            (*appKeyChangeHandler)(BTN_PRESSED_MEDIUM);
         }
     }
 }

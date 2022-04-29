@@ -1166,6 +1166,11 @@ static void SPPBLEServer_handleKeys(uint8_t shift, uint8_t state)
       break;
     case BTN_PRESSED_MEDIUM:
       SDITask_PrintfToUART("**SPPBLEServer Pressed Medium \r\n");
+      if(POWER_OnOff_FLAG == true)
+      {
+          Board_PowerOff();
+          Power_shutdown(0,0);
+      }
       break;
     case BTN_PRESSED_LONG:
       if(POWER_OnOff_FLAG == true)
