@@ -146,15 +146,17 @@ void Board_initKey_PowerOn(void)
   hKeyPins = PIN_open(&keyPins, keyPinsCfg);
   if(PIN_getInputValue(Board_KEY_IN) == 0)
   {
-       delay_ms(KEY_DELAY_POWERON_TIMEOUT);
-       PIN_setOutputValue(hKeyPins, Board_S_LED, 0);
-       PIN_setOutputValue(hKeyPins, Board_POWER_OUT, 1);
-       POWER_OnOff_FLAG = true;  //Power ON
+      SDITask_PrintfToUART("PowerOn Delay 5s\r\n");
+      delay_ms(KEY_DELAY_POWERON_TIMEOUT);
+      PIN_setOutputValue(hKeyPins, Board_S_LED, 0);
+      PIN_setOutputValue(hKeyPins, Board_POWER_OUT, 1);
+      POWER_OnOff_FLAG = true;  //Power ON
   }
 }
 
 void Board_PowerOff(void)
 {
+    Util_stopClock(&keyChangeClock);
     Util_stopClock(&periodicClock);
     for(uint8_t t = 0; t < 6; t++)
     {
@@ -232,8 +234,8 @@ static void Board_keyCallback(PIN_Handle hPin, PIN_Id pinId)
             
             if(pressedTimes < BTN_PRESSED_SHORT)
                 pressedType = BTN_PRESSED_SHORT;
-            else
-                pressedType = BTN_PRESSED_MEDIUM;
+//            else
+//                pressedType = BTN_PRESSED_MEDIUM;
  
             // Notify the application
             if (appKeyChangeHandler != NULL){
@@ -258,11 +260,10 @@ static void Board_keyPressedHandler(UArg a0)
 //    if(pressedTimes % 5 == 0){   // Toggle the Tip LED per 5 second
 //        BLED_TogglePutputValue();
 //    }
-    if(pressedTimes >= BTN_PRESSED_LONG){
-        Util_stopClock(&keyChangeClock);
+    if(pressedTimes >= BTN_PRESSED_MEDIUM){
         // Notify the application
         if (appKeyChangeHandler != NULL){
-            (*appKeyChangeHandler)(BTN_PRESSED_LONG);
+            (*appKeyChangeHandler)(BTN_PRESSED_MEDIUM);
         }
     }
 }

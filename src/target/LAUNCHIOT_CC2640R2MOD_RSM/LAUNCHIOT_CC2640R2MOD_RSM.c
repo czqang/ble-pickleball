@@ -290,6 +290,7 @@ const PIN_Config BoardGpioInitTable[] = {
     Board_S_LED  | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH | PIN_PUSHPULL | PIN_DRVSTR_MAX,     /* Board power initially ON */
     Board_POWER_OUT | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MIN,     /* Board power initially ON */
     
+    CC2640R2DK_4XS_UART_RX | PIN_INPUT_EN | PIN_PULLDOWN,                                              /* UART RX via debugger back channel */
     CC2640R2DK_4XS_UART_TX | PIN_GPIO_OUTPUT_EN | PIN_GPIO_HIGH | PIN_PUSHPULL,               /* UART TX pin at inactive level */
 #endif
     

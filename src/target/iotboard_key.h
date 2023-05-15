@@ -70,7 +70,7 @@ extern "C" {
 // Debounce timeout in milliseconds
 #define KEY_DEBOUNCE_TIMEOUT  100
 // Delay timeout in milliseconds
-#define KEY_DELAY_POWERON_TIMEOUT  5000
+#define KEY_DELAY_POWERON_TIMEOUT  3000
      
 #define BTN_PRESSED_SHORT       10              // 1 second
 #define BTN_PRESSED_MEDIUM      30              // 3 second

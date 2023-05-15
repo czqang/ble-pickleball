@@ -67,6 +67,9 @@ extern "C"
 
 // Key Pressed UUID
 #define SERIALPORTSERVICE_DATA_UUID             0xFFF1
+     
+// Battery Level UUID
+#define SERIALPORTSERVICE_BATTERY_UUID          0xFFF2
 
 // Serial Port Profile Services bit fields
 #define SERIALPORTSERVICE_SERVICE               0x00000001
